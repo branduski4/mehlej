@@ -1,0 +1,154 @@
+---
+import type { Product } from '../types';
+
+export interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const formattedPrice = new Intl.NumberFormat('es-MX', {
+  style: 'currency',
+  currency: 'MXN',
+}).format(product.price);
+
+// Stock status
+const isOutOfStock = product.stock === 0;
+const isLowStock = product.stock <= 5 && product.stock > 0;
+const canAddToCart = product.stock > 0;
+---
+
+<div class="group bg-luxury-gray rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full max-w-sm mx-auto">
+  <!-- Product Image -->
+  <div class="relative overflow-hidden aspect-[3/2] w-full">
+    <img 
+      src={product.image} 
+      alt={product.name}
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      loading="lazy"
+    />
+    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
+    {product.featured && (
+      <div class="absolute top-2 left-2 bg-luxury-gold text-luxury-black px-2 py-0.5 rounded-full text-xs font-medium">
+        Destacado
+      </div>
+    )}
+  </div>
+  
+  <!-- Product Info -->
+  <div class="p-4">
+    <!-- Category -->
+    <div class="text-luxury-gold-light text-sm uppercase tracking-wide mb-1">
+      {product.category === 'rings' ? 'Anillos' : 
+       product.category === 'necklaces' ? 'Collares' :
+       product.category === 'earrings' ? 'Aretes' :
+       product.category === 'bracelets' ? 'Brazaletes' :
+       product.category === 'watches' ? 'Relojes' : product.category}
+    </div>
+    
+    <!-- Product Name -->
+    <h3 class="text-lg font-playfair font-semibold text-luxury-white mb-2 group-hover:text-luxury-gold transition-colors duration-300 line-clamp-1">
+      {product.name}
+    </h3>
+    
+    <!-- Description -->
+    <p class="text-luxury-gold-light text-sm mb-3 line-clamp-2">
+      {product.description}
+    </p>
+    
+    <!-- Price -->
+    <div class="text-xl font-playfair font-bold text-luxury-gold mb-3">
+      {formattedPrice}
+    </div>
+    
+    <!-- Stock Info -->
+    <div class="mb-3">
+      <div class="text-sm text-luxury-gold-light">
+        En Existencia: <span class="text-luxury-white font-medium">{product.stock}</span>
+      </div>
+    </div>
+    
+    <!-- Quantity Selector and Buttons -->
+    <div class="space-y-3">
+      <!-- Quantity Selector -->
+      <div class="flex items-center justify-between">
+        <label class="text-sm text-luxury-gold-light">Cantidad:</label>
+        <div class="flex items-center space-x-2">
+          <button 
+            class="w-7 h-7 rounded-full border border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black transition-colors duration-200 flex items-center justify-center text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            data-product-id={product.id}
+            data-action="decrease"
+            data-stock={product.stock}
+            disabled={isOutOfStock}
+          >
+            -
+          </button>
+          <span 
+            class="w-8 text-center text-luxury-white font-medium text-sm"
+            data-product-id={product.id}
+            data-quantity="1"
+            data-stock={product.stock}
+          >
+            1
+          </span>
+          <button 
+            class="w-7 h-7 rounded-full border border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black transition-colors duration-200 flex items-center justify-center text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            data-product-id={product.id}
+            data-action="increase"
+            data-stock={product.stock}
+            disabled={isOutOfStock}
+          >
+            +
+          </button>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="grid grid-cols-2 gap-2">
+        <button 
+          class="px-3 py-2 bg-transparent border border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black transition-all duration-300 font-medium text-sm uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed"
+          data-product-id={product.id}
+          data-action="add-to-cart"
+          disabled={!canAddToCart}
+        >
+          {isOutOfStock ? 'Sin Existencia' : 'Agregar'}
+        </button>
+        <button 
+          class="px-3 py-2 bg-luxury-gold text-luxury-black hover:bg-luxury-gold-dark transition-all duration-300 font-medium text-sm uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed"
+          data-product-id={product.id}
+          data-action="buy-now"
+          disabled={!canAddToCart}
+        >
+          {isOutOfStock ? 'No Disp.' : 'Comprar'}
+        </button>
+      </div>
+      
+      <!-- Stock Messages -->
+      {isLowStock && !isOutOfStock && (
+        <div class="text-orange-400 text-sm text-center">
+          ⚠️ Solo quedan {product.stock} en existencia
+        </div>
+      )}
+      
+      {isOutOfStock && (
+        <div class="text-red-400 text-sm text-center">
+          🔴 Actualmente sin existencia
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
+<style>
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

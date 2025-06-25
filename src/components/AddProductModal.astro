@@ -1,0 +1,259 @@
+---
+// Componente modal para agregar productos
+---
+
+<!-- Add Product Modal -->
+<div id="add-product-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+  <div class="bg-luxury-gray rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-playfair font-semibold text-luxury-gold">Agregar Nuevo Producto</h3>
+      <button 
+        id="close-add-modal"
+        class="text-luxury-gold-light hover:text-luxury-gold text-2xl font-bold"
+      >
+        ×
+      </button>
+    </div>
+    
+    <form id="add-product-form" class="space-y-6">
+      <!-- Nombre del Producto -->
+      <div>
+        <label for="product-name" class="block text-luxury-gold-light text-sm mb-2">Nombre del Producto *</label>
+        <input 
+          type="text" 
+          id="product-name" 
+          name="name"
+          required
+          class="w-full px-4 py-3 rounded bg-luxury-black text-luxury-white border border-luxury-gold focus:outline-none focus:ring-2 focus:ring-luxury-gold"
+          placeholder="Ej: Anillo de Diamante"
+        />
+      </div>
+      
+      <!-- Descripción -->
+      <div>
+        <label for="product-description" class="block text-luxury-gold-light text-sm mb-2">Descripción *</label>
+        <textarea 
+          id="product-description" 
+          name="description"
+          required
+          rows="3"
+          class="w-full px-4 py-3 rounded bg-luxury-black text-luxury-white border border-luxury-gold focus:outline-none focus:ring-2 focus:ring-luxury-gold resize-none"
+          placeholder="Describe el producto..."
+        ></textarea>
+      </div>
+      
+      <!-- Precio -->
+      <div>
+        <label for="product-price" class="block text-luxury-gold-light text-sm mb-2">Precio (MXN) *</label>
+        <input 
+          type="number" 
+          id="product-price" 
+          name="price"
+          required
+          min="0"
+          step="0.01"
+          class="w-full px-4 py-3 rounded bg-luxury-black text-luxury-white border border-luxury-gold focus:outline-none focus:ring-2 focus:ring-luxury-gold"
+          placeholder="0.00"
+        />
+      </div>
+      
+      <!-- URL de la Imagen -->
+      <div>
+        <label for="product-image" class="block text-luxury-gold-light text-sm mb-2">URL de la Imagen *</label>
+        <input 
+          type="url" 
+          id="product-image" 
+          name="image"
+          required
+          class="w-full px-4 py-3 rounded bg-luxury-black text-luxury-white border border-luxury-gold focus:outline-none focus:ring-2 focus:ring-luxury-gold"
+          placeholder="https://ejemplo.com/imagen.jpg"
+        />
+      </div>
+      
+      <!-- Categoría -->
+      <div>
+        <label for="product-category" class="block text-luxury-gold-light text-sm mb-2">Categoría *</label>
+        <select 
+          id="product-category" 
+          name="category"
+          required
+          class="w-full px-4 py-3 rounded bg-luxury-black text-luxury-white border border-luxury-gold focus:outline-none focus:ring-2 focus:ring-luxury-gold"
+        >
+          <option value="">Selecciona una categoría</option>
+          <option value="rings">Anillos</option>
+          <option value="necklaces">Collares</option>
+          <option value="earrings">Aretes</option>
+          <option value="bracelets">Brazaletes</option>
+          <option value="watches">Relojes</option>
+        </select>
+      </div>
+      
+      <!-- Stock -->
+      <div>
+        <label for="product-stock" class="block text-luxury-gold-light text-sm mb-2">Stock Disponible *</label>
+        <input 
+          type="number" 
+          id="product-stock" 
+          name="stock"
+          required
+          min="0"
+          class="w-full px-4 py-3 rounded bg-luxury-black text-luxury-white border border-luxury-gold focus:outline-none focus:ring-2 focus:ring-luxury-gold"
+          placeholder="0"
+        />
+      </div>
+      
+      <!-- Producto Destacado -->
+      <div class="flex items-center space-x-3">
+        <input 
+          type="checkbox" 
+          id="product-featured" 
+          name="featured"
+          class="w-4 h-4 text-luxury-gold bg-luxury-black border-luxury-gold rounded focus:ring-luxury-gold focus:ring-2"
+        />
+        <label for="product-featured" class="text-luxury-gold-light text-sm">Producto Destacado</label>
+      </div>
+      
+      <!-- Botones -->
+      <div class="flex space-x-3 pt-4">
+        <button 
+          type="button"
+          id="cancel-add-product"
+          class="flex-1 px-4 py-2 bg-transparent border border-luxury-gold text-luxury-gold rounded hover:bg-luxury-gold hover:text-luxury-black transition-colors duration-200"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="submit"
+          class="flex-1 px-4 py-2 bg-luxury-gold text-luxury-black rounded hover:bg-luxury-gold-dark transition-colors duration-200"
+        >
+          Agregar Producto
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  import { addProductToFirestore } from '../lib/firestore';
+  
+  // Elementos del DOM
+  const modal = document.getElementById('add-product-modal');
+  const form = document.getElementById('add-product-form') as HTMLFormElement;
+  const closeBtn = document.getElementById('close-add-modal');
+  const cancelBtn = document.getElementById('cancel-add-product');
+  
+  // Función para abrir el modal
+  function openAddProductModal() {
+    if (modal) {
+      modal.classList.remove('hidden');
+      // Limpiar el formulario
+      form?.reset();
+    }
+  }
+  
+  // Función para cerrar el modal
+  function closeAddProductModal() {
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
+  
+  // Event listeners
+  closeBtn?.addEventListener('click', closeAddProductModal);
+  cancelBtn?.addEventListener('click', closeAddProductModal);
+  
+  // Cerrar modal al hacer clic fuera
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeAddProductModal();
+    }
+  });
+  
+  // Cerrar modal con Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+      closeAddProductModal();
+    }
+  });
+  
+  // Manejar envío del formulario
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const productData = {
+      name: formData.get('name') as string,
+      description: formData.get('description') as string,
+      price: parseFloat(formData.get('price') as string),
+      image: formData.get('image') as string,
+      category: formData.get('category') as string,
+      stock: parseInt(formData.get('stock') as string),
+      featured: formData.get('featured') === 'on',
+    };
+    
+    // Validaciones básicas
+    if (!productData.name || !productData.description || !productData.image || !productData.category) {
+      showNotification('Por favor completa todos los campos requeridos', 'error');
+      return;
+    }
+    
+    if (productData.price <= 0) {
+      showNotification('El precio debe ser mayor a 0', 'error');
+      return;
+    }
+    
+    if (productData.stock < 0) {
+      showNotification('El stock no puede ser negativo', 'error');
+      return;
+    }
+    
+    try {
+      // Mostrar indicador de carga
+      const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Agregando...';
+      submitBtn.disabled = true;
+      
+      // Agregar producto a Firestore
+      const result = await addProductToFirestore(productData);
+      
+      if (result.success) {
+        showNotification('¡Producto agregado exitosamente!', 'success');
+        closeAddProductModal();
+        
+        // Recargar la página para mostrar el nuevo producto
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        showNotification('Error al agregar el producto', 'error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showNotification('Error al agregar el producto', 'error');
+    } finally {
+      // Restaurar botón
+      const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+  
+  // Función para mostrar notificaciones
+  function showNotification(message: string, type: 'success' | 'error') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 ${
+      type === 'success' ? 'bg-green-600' : 'bg-red-600'
+    }`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
+  }
+  
+  // Hacer la función disponible globalmente
+  (window as any).openAddProductModal = openAddProductModal;
+</script> 

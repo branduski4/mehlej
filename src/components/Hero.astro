@@ -1,0 +1,76 @@
+---
+// Hero component with video background
+---
+
+<section class="relative h-screen flex items-center justify-center overflow-hidden">
+  <!-- Video Background -->
+  <video 
+    class="absolute inset-0 w-full h-full object-cover"
+    autoplay 
+    loop 
+    muted 
+    playsinline
+    poster="/images/hero-poster.jpg"
+  >
+    <source src="/videos/luxury-jewelry-bg.mp4" type="video/mp4">
+    <!-- Fallback for browsers that don't support video -->
+    <div class="absolute inset-0 bg-gradient-to-br from-luxury-black via-luxury-gray to-luxury-black"></div>
+  </video>
+  
+  <!-- Dark Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+  
+  <!-- Content -->
+  <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+    <!-- Logo -->
+    <div class="mb-8">
+      <h1 class="text-6xl md:text-8xl font-playfair font-bold text-luxury-gold tracking-wider">
+        MEHLEJ
+      </h1>
+      <div class="w-24 h-1 bg-luxury-gold mx-auto mt-4"></div>
+    </div>
+    
+    <!-- Headline -->
+    <h2 class="text-2xl md:text-4xl font-cormorant font-light text-luxury-white mb-8 leading-relaxed">
+      La elegancia vive en los detalles
+    </h2>
+    
+    <!-- Subtitle -->
+    <p class="text-lg md:text-xl text-luxury-gold-light mb-12 max-w-2xl mx-auto">
+      Descubre nuestra colección curada de piezas de joyería atemporales, elaboradas con excepcional atención al detalle y los mejores materiales.
+    </p>
+    
+    <!-- CTA Button -->
+    <button 
+      class="group relative px-8 py-4 bg-transparent border-2 border-luxury-gold text-luxury-gold font-playfair text-lg tracking-wide uppercase hover:bg-luxury-gold hover:text-luxury-black transition-all duration-300 overflow-hidden"
+      onclick="document.getElementById('products').scrollIntoView({ behavior: 'smooth' })"
+    >
+      <span class="relative z-10">Explorar Colección</span>
+      <div class="absolute inset-0 bg-luxury-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+    </button>
+  </div>
+  
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+    <div class="w-6 h-10 border-2 border-luxury-gold rounded-full flex justify-center">
+      <div class="w-1 h-3 bg-luxury-gold rounded-full mt-2 animate-pulse"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in-up {
+    animation: fadeInUp 1s ease-out;
+  }
+</style> 
