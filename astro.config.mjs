@@ -1,12 +1,12 @@
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 import vue from "@astrojs/vue";
-import vercel from "@astrojs/vercel/serverless"; // or "@astrojs/vercel/edge" if you prefer edge
+import vercel from "@astrojs/vercel/static";
 
 export default defineConfig({
   integrations: [tailwind(), vue()],
   adapter: vercel(),
-  output: "server", // required for adapter to work
+  output: "static",
   server: {
     port: 4321,
   },
