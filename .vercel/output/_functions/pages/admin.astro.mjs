@@ -1,6 +1,10 @@
-<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="description" content="MEHLEJ - Luxury Jewelry Collection. Discover timeless elegance and exceptional craftsmanship."><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.10.1"><!-- Google Fonts --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet"><title>Panel de Administración - MEHLEJ</title><link rel="stylesheet" href="/_astro/about.C71COSQY.css"></head> <body class="bg-luxury-black text-luxury-white font-elegant">  <main class="min-h-screen flex flex-col items-center justify-center bg-luxury-black text-luxury-white p-4"> <div class="w-full max-w-md"> <h1 class="text-4xl font-playfair font-bold text-luxury-gold mb-6 text-center">Panel de Administración</h1> <p class="text-lg text-luxury-gold-light mb-8 text-center">Inicia sesión para administrar productos, inventario y pedidos.</p> <div id="loading-message" class="text-center text-luxury-gold-light mb-4"> <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-luxury-gold mx-auto mb-2"></div>
-Verificando autenticación...
-</div> <div id="auth-container" class="hidden"> <div id="firebase-auth" class="w-full max-w-md mx-auto"> <div id="auth-container"> <!-- Sign In Form --> <div id="signin-form" class="space-y-6"> <h2 class="text-2xl font-playfair font-semibold text-luxury-gold text-center mb-6">
+/* empty css                                 */
+import { c as createComponent, m as maybeRenderHead, g as renderScript, e as renderTemplate, f as renderComponent } from '../chunks/astro/server_Dx1A4mH6.mjs';
+import { $ as $$Layout } from '../chunks/Layout_kZdf2jjt.mjs';
+export { renderers } from '../renderers.mjs';
+
+const $$FirebaseAuth = createComponent(async ($$result, $$props, $$slots) => {
+  return renderTemplate`${maybeRenderHead()}<div id="firebase-auth" class="w-full max-w-md mx-auto"> <div id="auth-container"> <!-- Sign In Form --> <div id="signin-form" class="space-y-6"> <h2 class="text-2xl font-playfair font-semibold text-luxury-gold text-center mb-6">
 Iniciar Sesión
 </h2> <div class="space-y-4"> <input type="email" id="email" placeholder="Correo Electrónico" class="w-full px-4 py-3 rounded bg-luxury-black text-luxury-white border border-luxury-gold focus:outline-none focus:ring-2 focus:ring-luxury-gold"> <input type="password" id="password" placeholder="Contraseña" class="w-full px-4 py-3 rounded bg-luxury-black text-luxury-white border border-luxury-gold focus:outline-none focus:ring-2 focus:ring-luxury-gold"> </div> <div class="space-y-3"> <button id="signin-btn" class="w-full bg-luxury-gold text-luxury-black py-3 px-6 font-medium uppercase tracking-wide hover:bg-luxury-gold-dark transition-colors duration-300">
 Iniciar Sesión
@@ -12,6 +16,27 @@ Crear Cuenta
 Registrarse
 </button> <p class="text-center text-sm text-luxury-gold-light">
 ¿Ya tienes una cuenta?
-<button id="show-signin" class="text-luxury-gold hover:underline">Iniciar Sesión</button> </p> </div> <!-- Loading State --> <div id="loading" class="hidden text-center"> <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-luxury-gold mx-auto mb-4"></div> <p class="text-luxury-gold-light">Cargando...</p> </div> <!-- Error Message --> <div id="error-message" class="hidden bg-red-600 text-white p-3 rounded text-sm text-center"></div> </div> </div> <script type="module" src="/_astro/FirebaseAuth.astro_astro_type_script_index_0_lang.B398hdtf.js"></script> <div class="mt-6 text-center"> <p class="text-luxury-gold-light text-sm">
+<button id="show-signin" class="text-luxury-gold hover:underline">Iniciar Sesión</button> </p> </div> <!-- Loading State --> <div id="loading" class="hidden text-center"> <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-luxury-gold mx-auto mb-4"></div> <p class="text-luxury-gold-light">Cargando...</p> </div> <!-- Error Message --> <div id="error-message" class="hidden bg-red-600 text-white p-3 rounded text-sm text-center"></div> </div> </div> ${renderScript($$result, "/Users/branduski/Documents/mehlej-joyeria2/src/components/FirebaseAuth.astro?astro&type=script&index=0&lang.ts")}`;
+}, "/Users/branduski/Documents/mehlej-joyeria2/src/components/FirebaseAuth.astro", void 0);
+
+const $$Admin = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Panel de Administraci\xF3n - MEHLEJ" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<main class="min-h-screen flex flex-col items-center justify-center bg-luxury-black text-luxury-white p-4"> <div class="w-full max-w-md"> <h1 class="text-4xl font-playfair font-bold text-luxury-gold mb-6 text-center">Panel de Administración</h1> <p class="text-lg text-luxury-gold-light mb-8 text-center">Inicia sesión para administrar productos, inventario y pedidos.</p> <div id="loading-message" class="text-center text-luxury-gold-light mb-4"> <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-luxury-gold mx-auto mb-2"></div>
+Verificando autenticación...
+</div> <div id="auth-container" class="hidden"> ${renderComponent($$result2, "FirebaseAuth", $$FirebaseAuth, {})} <div class="mt-6 text-center"> <p class="text-luxury-gold-light text-sm">
 ¿Es tu primera vez?
-<a href="/register" class="text-luxury-gold hover:underline">Crear cuenta de administrador</a> </p> </div> </div> </div> </main>  </body></html> <script type="module" src="/_astro/admin.astro_astro_type_script_index_0_lang.BK3oFYrb.js"></script>
+<a href="/register" class="text-luxury-gold hover:underline">Crear cuenta de administrador</a> </p> </div> </div> </div> </main> ` })} ${renderScript($$result, "/Users/branduski/Documents/mehlej-joyeria2/src/pages/admin.astro?astro&type=script&index=0&lang.ts")}`;
+}, "/Users/branduski/Documents/mehlej-joyeria2/src/pages/admin.astro", void 0);
+
+const $$file = "/Users/branduski/Documents/mehlej-joyeria2/src/pages/admin.astro";
+const $$url = "/admin";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$Admin,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };
