@@ -1,0 +1,135 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import StockManagement from '../../components/StockManagement.astro';
+import AddProductModal from '../../components/AddProductModal.astro';
+import { getProductsFromFirestore } from '../../lib/firestore';
+import type { Product } from '../../types';
+
+// Obtener productos de Firestore
+let products: Product[] = [];
+let loading = true;
+let error = false;
+
+try {
+  const result = await getProductsFromFirestore();
+  if (result.success) {
+    products = result.products;
+  } else {
+    error = true;
+    console.error('Error obteniendo productos:', result.error);
+  }
+} catch (err) {
+  error = true;
+  console.error('Error en dashboard:', err);
+} finally {
+  loading = false;
+}
+---
+
+<Layout title="Panel de Administración - MEHLEJ">
+  <main class="min-h-screen bg-luxury-black text-luxury-white">
+    <!-- Header -->
+    <header class="bg-luxury-gray border-b border-luxury-gold border-opacity-20 p-6">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div>
+          <h1 class="text-3xl font-playfair font-bold text-luxury-gold">Panel de Administración</h1>
+          <p class="text-luxury-gold-light">Administra tu inventario de joyería y pedidos</p>
+        </div>
+        <div class="flex space-x-3">
+          <button 
+            id="add-product-btn"
+            class="bg-luxury-gold text-luxury-black px-4 py-2 rounded hover:bg-luxury-gold-dark transition-colors duration-200"
+          >
+            + Agregar Producto
+          </button>
+          <button 
+            id="signout-btn"
+            class="bg-transparent border border-luxury-gold text-luxury-gold px-4 py-2 rounded hover:bg-luxury-gold hover:text-luxury-black transition-colors duration-200"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto p-6">
+      <div class="space-y-8">
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-luxury-gray p-6 rounded-lg">
+            <h3 class="text-lg font-semibold text-luxury-gold mb-2">Total de Productos</h3>
+            <p class="text-3xl font-bold text-luxury-white">{loading ? '...' : products.length}</p>
+          </div>
+          <div class="bg-luxury-gray p-6 rounded-lg">
+            <h3 class="text-lg font-semibold text-luxury-gold mb-2">Productos Destacados</h3>
+            <p class="text-3xl font-bold text-luxury-white">{loading ? '...' : products.filter(p => p.featured).length}</p>
+          </div>
+          <div class="bg-luxury-gray p-6 rounded-lg">
+            <h3 class="text-lg font-semibold text-luxury-gold mb-2">Categorías</h3>
+            <p class="text-3xl font-bold text-luxury-white">{loading ? '...' : new Set(products.map(p => p.category)).size}</p>
+          </div>
+        </div>
+        
+        <!-- Stock Management -->
+        <StockManagement />
+      </div>
+    </div>
+  </main>
+  
+  <!-- Add Product Modal -->
+  <AddProductModal />
+</Layout>
+
+<script>
+  import { auth } from '../../lib/firebase';
+  import { signOut as firebaseSignOut } from 'firebase/auth';
+  
+  function signOut() {
+    console.log('Función signOut ejecutada');
+    firebaseSignOut(auth).then(() => {
+      console.log('Sesión cerrada exitosamente, redirigiendo...');
+      window.location.href = '/';
+    }).catch((error) => {
+      console.error('Error signing out:', error);
+    });
+  }
+  
+  // Agregar event listeners cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', () => {
+    // Botón de cerrar sesión
+    const signOutBtn = document.getElementById('signout-btn');
+    if (signOutBtn) {
+      signOutBtn.addEventListener('click', signOut);
+      console.log('Event listener agregado al botón de cerrar sesión');
+    } else {
+      console.error('No se encontró el botón de cerrar sesión');
+    }
+    
+    // Botón de agregar producto
+    const addProductBtn = document.getElementById('add-product-btn');
+    if (addProductBtn) {
+      addProductBtn.addEventListener('click', () => {
+        // Llamar a la función global del modal
+        if ((window as any).openAddProductModal) {
+          (window as any).openAddProductModal();
+        } else {
+          console.error('Función openAddProductModal no está disponible');
+        }
+      });
+      console.log('Event listener agregado al botón de agregar producto');
+    } else {
+      console.error('No se encontró el botón de agregar producto');
+    }
+  });
+  
+  // Check if user is authenticated
+  import { onAuthStateChanged } from 'firebase/auth';
+  
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      // Redirect to login if not authenticated
+      window.location.href = '/admin';
+    }
+  });
+</script> 
