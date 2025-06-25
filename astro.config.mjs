@@ -7,7 +7,4 @@ export default defineConfig({
   integrations: [tailwind(), vue()],
   adapter: vercel(),
   output: "static",
-  server: {
-    port: 4321,
-  },
 });
